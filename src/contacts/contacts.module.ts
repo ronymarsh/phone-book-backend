@@ -8,7 +8,7 @@ import { ContactsRepository } from './contacts.repository';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.PHONE_BOOK_DB_CONNECTION),
+    MongooseModule.forRoot(process.env.MONGO_PHONE_BOOK_HOST),
     MongooseModule.forFeature([{name:"Contacts",schema:{}}])
 
   ],
