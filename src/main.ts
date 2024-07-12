@@ -15,7 +15,9 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(3000);
+  
+  const port = process.env.PHONE_BOOK_PORT || 3000;
+  await app.listen(port);
 }
 bootstrap().catch((error) => {
   console.log('Error caught on starting main:', error);

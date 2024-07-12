@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Contact, ContactDocument } from './contact.schema';
+import { CreateContactDto } from '../dtos/create-contact.dto';
+import { log } from 'console';
 
 @Injectable()
 export class ContactsRepository {
@@ -10,7 +12,11 @@ export class ContactsRepository {
     private readonly contactsModel: Model<Contact>,
   ) {}
 
-  async create(createContactDto: any): Promise<ContactDocument> {
-    return this.contactsModel.create(createContactDto);
+  async create(contact: CreateContactDto): Promise<ContactDocument> {
+    return this.contactsModel.create(contact);
+  }
+
+  async bulkCreate(contacts: CreateContactDto[]): Promise<ContactDocument[]> {
+    return this.contactsModel.insertMany(contacts);
   }
 }
