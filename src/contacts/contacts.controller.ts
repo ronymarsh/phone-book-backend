@@ -5,12 +5,14 @@ import {
   Param,
   ParseArrayPipe,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ContactsService } from './contacts.service';
 import { ContactDocument } from './repositories/contact.schema';
 import { CreateContactDto } from './dtos/create-contact.dto';
 import { IsMongoId } from 'class-validator';
 import { MongoIdParam } from './dtos/mongo-id-param.dto';
+import { PaginationRequestDto } from './dtos/pagination.dto';
 
 @Controller('contacts')
 export class ContactsController {
@@ -24,7 +26,9 @@ export class ContactsController {
   }
 
   @Get()
-  async getContacts() {}
+  async getContacts(@Query() paginationRequestDto: PaginationRequestDto) {
+    return this.contactsService.getContacts(paginationRequestDto);
+  }
 
   @Get(':id')
   async getContactById(@Param() mongoIdParam: MongoIdParam) {
