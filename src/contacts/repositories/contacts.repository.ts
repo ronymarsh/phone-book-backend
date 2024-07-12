@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Contact, ContactDocument } from './contact.schema';
-import { CreateContactDto } from '../dtos/contact.dto';
+import { CreateContactDto, UpadteContactDto } from '../dtos/contact.dto';
 import {
   PaginationRequestDto,
   PaginationResponseDto,
@@ -30,7 +30,7 @@ export class ContactsRepository {
 
   async findManyWithPagination(
     paginationRequestDto: PaginationRequestDto,
-  ): Promise<PaginationResponseDto> {
+  ): Promise<PaginationResponseDto<ContactDocument>> {
     const { page, pageSize } = paginationRequestDto;
     const _skip = (page - 1) * pageSize;
     const totalCount = await this.contactModel.countDocuments();
@@ -54,5 +54,12 @@ export class ContactsRepository {
 
   async deleteById(id: string): Promise<ContactDocument> {
     return this.contactModel.findByIdAndDelete(id);
+  }
+
+  async update(
+    id: string,
+    updateDto: UpadteContactDto,
+  ): Promise<ContactDocument> {
+    return this.contactModel.findByIdAndUpdate(id, updateDto, { new: true });
   }
 }

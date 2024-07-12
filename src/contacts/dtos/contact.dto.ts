@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import {
   IsMongoId,
   IsNotEmpty,
@@ -28,6 +28,8 @@ export class CreateContactDto {
   @IsString()
   address: string;
 }
+
+export class UpadteContactDto extends PartialType(CreateContactDto) {}
 
 // for swagger
 export class ContactDocumentDto extends CreateContactDto {
