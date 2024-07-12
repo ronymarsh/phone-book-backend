@@ -19,4 +19,8 @@ export class ContactsRepository {
   async bulkCreate(contacts: CreateContactDto[]): Promise<ContactDocument[]> {
     return this.contactsModel.insertMany(contacts);
   }
+
+  async findById(id:string):Promise<ContactDocument>{
+    return this.contactsModel.findById(id)
+  }
 }

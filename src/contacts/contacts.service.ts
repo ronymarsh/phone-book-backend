@@ -13,4 +13,9 @@ export class ContactsService {
   bulkCreate(contacts: CreateContactDto[]): Promise<ContactDocument[]> {
     return this.contactsRepository.bulkCreate(contacts);
   }
+
+  getContactById(id:string):Promise<ContactDocument>{
+    return this.contactsRepository.findById(id)
+  }
+  
 }
