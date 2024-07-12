@@ -13,12 +13,17 @@ import { ContactDocument } from './repositories/contact.schema';
 import { ContactDocumentDto, CreateContactDto } from './dtos/contact.dto';
 import { IsMongoId } from 'class-validator';
 import { MongoIdParam } from '../dtos/mongo-id-param.dto';
-import { PaginationRequestDto } from '../dtos/pagination.dto';
 import {
+  PaginationRequestDto,
+  PaginationResponseDto,
+} from '../dtos/pagination.dto';
+import {
+  ApiBody,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiParam,
   ApiQuery,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -28,6 +33,7 @@ export class ContactsController {
   constructor(private readonly contactsService: ContactsService) {}
 
   @Post()
+  @ApiBody({ type: () => CreateContactDto })
   @ApiCreatedResponse({
     description: 'Contact created',
     type: ContactDocumentDto,
@@ -51,31 +57,47 @@ export class ContactsController {
     description: 'Number of contacts per page',
     required: false,
   })
-  async getContacts(@Query() paginationRequestDto: PaginationRequestDto) {
+  @ApiResponse({ type: () => PaginationResponseDto })
+  async getContacts(
+    @Query() paginationRequestDto: PaginationRequestDto,
+  ): Promise<PaginationResponseDto<ContactDocument[]>> {
     return this.contactsService.getContacts(paginationRequestDto);
   }
 
   @Get(':id')
   @ApiParam({ name: 'id', type: MongoIdParam })
   @ApiOkResponse({
-    description: 'Get specific contact by its mongo id',
+    description: 'Desired contact by provided ID',
     type: ContactDocumentDto,
   })
-  async getContactById(@Param() mongoIdParam: MongoIdParam) {
+  async getContactById(
+    @Param() mongoIdParam: MongoIdParam,
+  ): Promise<ContactDocument> {
     return this.contactsService.getContactById(mongoIdParam.id);
   }
 
   @Post('bulk')
+  @ApiBody({ type: [CreateContactDto] })
+  @ApiCreatedResponse({
+    description: 'All contacts created successfully',
+    type: [ContactDocumentDto],
+  })
   async bulkCreateContacts(
     @Body(new ParseArrayPipe({ items: CreateContactDto }))
     contacts: CreateContactDto[],
-  ): Promise<any> {
+  ): Promise<ContactDocument[]> {
     return this.contactsService.bulkCreate(contacts);
   }
 
   @Delete(':id')
   @ApiParam({ name: 'id', type: MongoIdParam })
-  async deleteContactById(@Param() mongoIdParam: MongoIdParam) {
+  @ApiOkResponse({
+    description: 'Contact deleted',
+    type: ContactDocumentDto,
+  })
+  async deleteContactById(
+    @Param() mongoIdParam: MongoIdParam,
+  ): Promise<ContactDocument> {
     return this.contactsService.deleteContactById(mongoIdParam.id);
   }
 }

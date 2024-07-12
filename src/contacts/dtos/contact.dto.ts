@@ -8,22 +8,22 @@ import {
 } from 'class-validator';
 
 export class CreateContactDto {
-  @ApiProperty()
+  @ApiProperty({ required: true, type: String })
   @IsNotEmpty()
   @IsString()
   firstName: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: true, type: String })
   @IsNotEmpty()
   @IsString()
   lastName: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: true, type: String })
   @IsNotEmpty()
   @IsPhoneNumber()
   phone: string;
 
-  @ApiPropertyOptional()
+  @ApiProperty({ required: false, type: String })
   @IsOptional()
   @IsString()
   address: string;

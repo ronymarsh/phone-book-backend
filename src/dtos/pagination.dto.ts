@@ -4,15 +4,15 @@ import {
   ApiResponseProperty,
 } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber, Max } from 'class-validator';
+import { IsNumber, Max, ValidateNested } from 'class-validator';
 
 export class PaginationRequestDto {
-  // @ApiPropertyOptional()÷
+  @ApiProperty({ required: false, type: Number })
   @Type(() => Number)
   @IsNumber()
   page = 1;
 
-  // @ApiPropertyOptional()
+  @ApiProperty({ required: false, type: Number })
   @IsNumber()
   @Type(() => Number)
   @Max(10)
@@ -33,7 +33,12 @@ export class PaginationMetadataDto {
   totalCount: number;
 }
 
-export class PaginationResponseDto {
+export class PaginationResponseDto<T> {
+  @ApiResponseProperty()
+  @ValidateNested()
+  @Type(() => PaginationMetadataDto)
   metadata: PaginationMetadataDto;
-  data: any[];
+
+  @ApiResponseProperty()
+  data: T[];
 }
