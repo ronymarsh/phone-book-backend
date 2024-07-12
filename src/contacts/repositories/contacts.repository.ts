@@ -7,7 +7,7 @@ import {
   PaginationRequestDto,
   PaginationResponseDto,
   PaginationMetadataDto,
-} from '../dtos/pagination.dto';
+} from '../../dtos/pagination.dto';
 
 @Injectable()
 export class ContactsRepository {

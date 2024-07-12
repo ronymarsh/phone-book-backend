@@ -11,8 +11,8 @@ import { ContactsService } from './contacts.service';
 import { ContactDocument } from './repositories/contact.schema';
 import { CreateContactDto } from './dtos/create-contact.dto';
 import { IsMongoId } from 'class-validator';
-import { MongoIdParam } from './dtos/mongo-id-param.dto';
-import { PaginationRequestDto } from './dtos/pagination.dto';
+import { MongoIdParam } from '../dtos/mongo-id-param.dto';
+import { PaginationRequestDto } from '../dtos/pagination.dto';
 
 @Controller('contacts')
 export class ContactsController {

@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { ContactsRepository } from './repositories/contacts.repository';
 import { ContactDocument } from './repositories/contact.schema';
 import { CreateContactDto } from './dtos/create-contact.dto';
-import { PaginationResponseDto, PaginationRequestDto } from './dtos/pagination.dto';
+import {
+  PaginationResponseDto,
+  PaginationRequestDto,
+} from '../dtos/pagination.dto';
 
 @Injectable()
 export class ContactsService {
