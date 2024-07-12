@@ -4,8 +4,8 @@ import { IsNumber, Max } from 'class-validator';
 
 export class PaginationRequestDto {
   @ApiProperty()
-  @IsNumber()
   @Type(() => Number)
+  @IsNumber()
   page = 1;
 
   @ApiProperty()

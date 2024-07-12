@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Contact, ContactDocument } from './contact.schema';
-import { CreateContactDto } from '../dtos/create-contact.dto';
+import { CreateContactDto } from '../dtos/contact.dto';
 import {
   PaginationRequestDto,
   PaginationResponseDto,

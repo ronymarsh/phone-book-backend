@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ContactsRepository } from './repositories/contacts.repository';
 import { ContactDocument } from './repositories/contact.schema';
-import { CreateContactDto } from './dtos/create-contact.dto';
+import { CreateContactDto } from './dtos/contact.dto';
 import {
   PaginationResponseDto,
   PaginationRequestDto,
