@@ -38,8 +38,18 @@ export class ContactsController {
   }
 
   @Get()
-  @ApiQuery({ name: 'page', type: Number })
-  @ApiQuery({ name: 'pageSize', type: Number })
+  @ApiQuery({
+    name: 'page',
+    type: Number,
+    description: 'Desired page number',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'pageSize',
+    type: Number,
+    description: 'Number of contacts per page',
+    required: false,
+  })
   async getContacts(@Query() paginationRequestDto: PaginationRequestDto) {
     return this.contactsService.getContacts(paginationRequestDto);
   }

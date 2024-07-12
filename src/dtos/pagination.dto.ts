@@ -1,14 +1,18 @@
-import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
+import {
+  ApiProperty,
+  ApiPropertyOptional,
+  ApiResponseProperty,
+} from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNumber, Max } from 'class-validator';
 
 export class PaginationRequestDto {
-  @ApiProperty()
+  // @ApiPropertyOptional()÷
   @Type(() => Number)
   @IsNumber()
   page = 1;
 
-  @ApiProperty()
+  // @ApiPropertyOptional()
   @IsNumber()
   @Type(() => Number)
   @Max(10)
