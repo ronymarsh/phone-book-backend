@@ -34,4 +34,16 @@ export class ContactDocumentDto extends CreateContactDto {
   @ApiProperty()
   @IsMongoId()
   _id: string;
+
+  @ApiProperty()
+  @IsMongoId()
+  createdAt: string;
+
+  @ApiProperty()
+  @IsMongoId()
+  updateAt: string;
+
+  @ApiProperty()
+  @IsMongoId()
+  __v: string;
 }
