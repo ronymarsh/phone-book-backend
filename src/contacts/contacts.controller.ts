@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseArrayPipe,
@@ -70,5 +71,11 @@ export class ContactsController {
     contacts: CreateContactDto[],
   ): Promise<any> {
     return this.contactsService.bulkCreate(contacts);
+  }
+
+  @Delete(':id')
+  @ApiParam({ name: 'id', type: MongoIdParam })
+  async deleteContactById(@Param() mongoIdParam: MongoIdParam) {
+    return this.contactsService.deleteContactById(mongoIdParam.id);
   }
 }

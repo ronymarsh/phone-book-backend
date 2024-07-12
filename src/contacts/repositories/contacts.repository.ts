@@ -51,4 +51,8 @@ export class ContactsRepository {
 
     return { metadata, data };
   }
+
+  async deleteById(id: string): Promise<ContactDocument> {
+    return this.contactModel.findByIdAndDelete(id);
+  }
 }

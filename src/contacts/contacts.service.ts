@@ -27,4 +27,8 @@ export class ContactsService {
   getContactById(id: string): Promise<ContactDocument> {
     return this.contactsRepository.findById(id);
   }
+
+  deleteContactById(id: string): Promise<ContactDocument> {
+    return this.contactsRepository.deleteById(id);
+  }
 }
