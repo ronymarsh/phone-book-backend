@@ -3,16 +3,16 @@ import { ContactsController } from './contacts.controller';
 import { ContactsService } from './contacts.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
-import { ContactsRepository } from './contacts.repository';
+import { ContactsRepository } from './repositories/contacts.repository';
+import { Contact, ContactSchema } from './repositories/contact.schema';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MONGO_PHONE_BOOK_HOST),
-    MongooseModule.forFeature([{name:"Contacts",schema:{}}])
-
+    MongooseModule.forFeature([{ name: Contact.name, schema: ContactSchema }]),
   ],
   controllers: [ContactsController],
-  providers: [ContactsService,ContactsRepository],
+  providers: [ContactsService, ContactsRepository],
 })
 export class ContactsModule {}
