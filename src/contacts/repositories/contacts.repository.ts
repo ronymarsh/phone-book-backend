@@ -62,4 +62,14 @@ export class ContactsRepository {
   ): Promise<ContactDocument> {
     return this.contactModel.findByIdAndUpdate(id, updateDto, { new: true });
   }
+
+  async search(searchKey: string) {
+    return this.contactModel.find({
+      $text: {
+        $search: searchKey,
+        $caseSensitive: false,
+        $diacriticSensitive: true,
+      },
+    });
+  }
 }

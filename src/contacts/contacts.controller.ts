@@ -36,6 +36,11 @@ import {
 export class ContactsController {
   constructor(private readonly contactsService: ContactsService) {}
 
+  @Get('/search')
+  async searchContacts(@Query('searchPhrase') searchPhrase: string) {
+    return this.contactsService.searchContacts(searchPhrase);
+  }
+
   @Get()
   @ApiQuery({
     name: 'page',

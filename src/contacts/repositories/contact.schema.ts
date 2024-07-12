@@ -17,4 +17,6 @@ export class Contact {
 }
 export type ContactDocument = HydratedDocument<Contact>;
 
-export const ContactSchema = SchemaFactory.createForClass(Contact);
+export const ContactSchema = SchemaFactory.createForClass(Contact).index({
+  '$**': 'text',
+});

@@ -38,4 +38,8 @@ export class ContactsService {
   ): Promise<ContactDocument> {
     return this.contactsRepository.update(contactId, upadateContactDto);
   }
+
+  searchContacts(searchPhrase: string) {
+    return this.contactsRepository.search(searchPhrase);
+  }
 }
