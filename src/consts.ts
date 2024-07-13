@@ -1,0 +1,2 @@
+export const MONGO_DUPLICATE_ERROR_CODE = 11000;
+export const MAX_CSV_LIMIT = 1000;
