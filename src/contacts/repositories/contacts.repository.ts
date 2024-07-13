@@ -100,6 +100,10 @@ export class ContactsRepository {
     return this.contactModel.findByIdAndUpdate(id, updateDto, { new: true });
   }
 
+  async findAll(limit?: number): Promise<ContactDocument[]> {
+    return this.contactModel.find().limit(limit).lean();
+  }
+
   private sortQueryToObject(sortBy: string, sortDirection: SortDirEnum) {
     const sortObj = {};
 

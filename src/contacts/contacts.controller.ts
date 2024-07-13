@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Res,
 } from '@nestjs/common';
 import { ContactsService } from './contacts.service';
 import { ContactDocument } from './repositories/contact.schema';
@@ -28,11 +29,17 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { ContactsCsvService } from './contacts-csv.service';
+import { Response } from 'express';
+import * as fs from 'fs';
 
 @ApiTags('Contacts')
 @Controller('contacts')
 export class ContactsController {
-  constructor(private readonly contactsService: ContactsService) {}
+  constructor(
+    private readonly contactsService: ContactsService,
+    private readonly contactsCsvService: ContactsCsvService,
+  ) {}
 
   @Get()
   @ApiQuery({
@@ -138,5 +145,16 @@ export class ContactsController {
     @Param() mongoIdParam: MongoIdParam,
   ): Promise<ContactDocument> {
     return this.contactsService.deleteContactById(mongoIdParam.id);
+  }
+
+  @Get('csv/export')
+  async exportContactsToCsv(@Res() responseObj: Response) {
+    return this.contactsCsvService.exportContacts(responseObj);
+  }
+
+  // csv file must include headers line
+  @Get('csv/import')
+  async importContactsFromCsv(@Query('fileName') fileName: string) {
+    return this.contactsCsvService.importContactsFromCsv(fileName);
   }
 }
