@@ -149,7 +149,7 @@ export class ContactsController {
 
   @Get('csv/export')
   async exportContactsToCsv(@Res() responseObj: Response) {
-    return this.contactsCsvService.exportContacts(responseObj);
+    return this.contactsCsvService.exportContactsToCsv(responseObj);
   }
 
   // csv file must include headers line

@@ -18,7 +18,7 @@ const csvToJSON = require('csv-file-to-json');
 export class ContactsCsvService {
   constructor(private contactsRepository: ContactsRepository) {}
 
-  async exportContacts(@Res() responseObj: Response) {
+  async exportContactsToCsv(@Res() responseObj: Response) {
     const destinationFilePath = `${process.env.CSV_DIRECTORY}/contacts.csv`;
     const contacts = await this.contactsRepository.findAll(MAX_CSV_LIMIT);
 
