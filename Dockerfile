@@ -20,6 +20,7 @@ RUN nest build
 
 #demo app, no worries..
 ENV MONGO_PHONE_BOOK_HOST="mongodb+srv://dbUser:H7o5iWOSek1xEoHc@phone-book.irpesip.mongodb.net/phoneBookDB"
+ENV CSV_DIRECTORY="tmp"
 
 EXPOSE 3000
 
