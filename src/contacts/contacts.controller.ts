@@ -14,6 +14,7 @@ import { ContactDocument } from './repositories/contact.schema';
 import {
   ContactDocumentDto,
   CreateContactDto,
+  SearchContactsQueryWithPaginationDto,
   UpadteContactDto,
 } from './dtos/contact.dto';
 import { MongoIdParam } from '../dtos/mongo-id-param.dto';
@@ -30,16 +31,12 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { log } from 'console';
 
 @ApiTags('Contacts')
 @Controller('contacts')
 export class ContactsController {
   constructor(private readonly contactsService: ContactsService) {}
-
-  @Get('/search')
-  async searchContacts(@Query('searchPhrase') searchPhrase: string) {
-    return this.contactsService.searchContacts(searchPhrase);
-  }
 
   @Get()
   @ApiQuery({
@@ -56,9 +53,12 @@ export class ContactsController {
   })
   @ApiResponse({ type: () => PaginationResponseDto })
   async getContacts(
-    @Query() paginationRequestDto: PaginationRequestDto,
+    @Query()
+    searchContactsQueryWithPaginationDto: SearchContactsQueryWithPaginationDto,
   ): Promise<PaginationResponseDto<ContactDocument>> {
-    return this.contactsService.getContacts(paginationRequestDto);
+    return this.contactsService.getContacts(
+      searchContactsQueryWithPaginationDto,
+    );
   }
 
   @Get(':id')
@@ -76,7 +76,7 @@ export class ContactsController {
   @Post()
   @ApiBody({ type: () => CreateContactDto })
   @ApiCreatedResponse({
-    description: 'Contact created',
+    description: 'Contact created successfully',
     type: ContactDocumentDto,
   })
   async createContact(
@@ -114,7 +114,7 @@ export class ContactsController {
   @Delete(':id')
   @ApiParam({ name: 'id', type: MongoIdParam })
   @ApiOkResponse({
-    description: 'Contact deleted',
+    description: 'Contact deleted successfully',
     type: ContactDocumentDto,
   })
   async deleteContactById(

@@ -1,11 +1,16 @@
+import { DefaultValuePipe } from '@nestjs/common';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
+  IsEnum,
   IsMongoId,
   IsNotEmpty,
   IsOptional,
   IsPhoneNumber,
   IsString,
 } from 'class-validator';
+import { PaginationRequestDto } from 'src/dtos/pagination.dto';
+import { SortDirEnum } from 'src/enums/db.enums';
 
 export class CreateContactDto {
   @ApiProperty({ required: true, type: String })
@@ -30,6 +35,40 @@ export class CreateContactDto {
 }
 
 export class UpadteContactDto extends PartialType(CreateContactDto) {}
+
+export class SearchContactsQueryWithPaginationDto extends PaginationRequestDto {
+  @ApiProperty({ required: false, type: String })
+  @IsOptional()
+  @IsString()
+  searchKey: string;
+
+  @ApiProperty({ required: false, type: String })
+  @IsOptional()
+  @IsString()
+  sortBy: string;
+
+  @ApiProperty({ required: false, type: String })
+  @IsOptional()
+  @IsEnum(SortDirEnum)
+  sortDirection: SortDirEnum;
+}
+
+export class SearchContactsQueryWithPaginationDtoWithPagination extends SearchContactsQueryWithPaginationDto {
+  @ApiProperty({ required: false, type: String })
+  @IsOptional()
+  @IsString()
+  searchKey: string;
+
+  @ApiProperty({ required: false, type: String })
+  @IsOptional()
+  @IsString()
+  sortBy: string;
+
+  @ApiProperty({ required: false, type: String })
+  @IsOptional()
+  @IsEnum(SortDirEnum)å
+  sortDirection: SortDirEnum;
+}
 
 // for swagger
 export class ContactDocumentDto extends CreateContactDto {

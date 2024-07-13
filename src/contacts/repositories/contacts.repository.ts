@@ -2,12 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Contact, ContactDocument } from './contact.schema';
-import { CreateContactDto, UpadteContactDto } from '../dtos/contact.dto';
 import {
-  PaginationRequestDto,
+  CreateContactDto,
+  SearchContactsQueryWithPaginationDto,
+  UpadteContactDto,
+} from '../dtos/contact.dto';
+import {
   PaginationResponseDto,
   PaginationMetadataDto,
 } from '../../dtos/pagination.dto';
+import { SortDirEnum } from 'src/enums/db.enums';
 
 @Injectable()
 export class ContactsRepository {
@@ -29,15 +33,25 @@ export class ContactsRepository {
   }
 
   async findManyWithPagination(
-    paginationRequestDto: PaginationRequestDto,
+    searchContactsQueryWithPaginationDto: SearchContactsQueryWithPaginationDto,
   ): Promise<PaginationResponseDto<ContactDocument>> {
-    const { page, pageSize } = paginationRequestDto;
+    const { page, pageSize, searchKey, sortBy, sortDirection } =
+      searchContactsQueryWithPaginationDto;
     const _skip = (page - 1) * pageSize;
     const totalCount = await this.contactModel.countDocuments();
 
     const data: ContactDocument[] = await this.contactModel
-      .find()
-      .sort({ firstName: 1 })
+      .find(
+        searchKey
+          ? {
+              $text: {
+                $search: searchKey,
+                $caseSensitive: false,
+              },
+            }
+          : {},
+      )
+      .sort(this.sortQueryToObject(sortBy, sortDirection))
       .skip(_skip)
       .limit(pageSize)
       .lean();
@@ -63,13 +77,15 @@ export class ContactsRepository {
     return this.contactModel.findByIdAndUpdate(id, updateDto, { new: true });
   }
 
-  async search(searchKey: string) {
-    return this.contactModel.find({
-      $text: {
-        $search: searchKey,
-        $caseSensitive: false,
-        $diacriticSensitive: true,
-      },
-    });
+  private sortQueryToObject(sortBy: string, sortDirection: SortDirEnum) {
+    const sortObj = {};
+
+    if (sortBy) {
+      Object.assign(sortObj, {
+        [`${sortBy}`]: sortDirection ? sortDirection : SortDirEnum.asc,
+      });
+    }
+
+    return sortObj;
   }
 }

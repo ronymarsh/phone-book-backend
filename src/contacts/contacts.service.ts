@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ContactsRepository } from './repositories/contacts.repository';
 import { ContactDocument } from './repositories/contact.schema';
-import { CreateContactDto, UpadteContactDto } from './dtos/contact.dto';
+import {
+  CreateContactDto,
+  SearchContactsQueryWithPaginationDto,
+  UpadteContactDto,
+} from './dtos/contact.dto';
 import {
   PaginationResponseDto,
   PaginationRequestDto,
@@ -19,9 +23,11 @@ export class ContactsService {
   }
 
   getContacts(
-    paginationRequestDto: PaginationRequestDto,
+    searchContactsQueryWithPaginationDto: SearchContactsQueryWithPaginationDto,
   ): Promise<PaginationResponseDto<ContactDocument>> {
-    return this.contactsRepository.findManyWithPagination(paginationRequestDto);
+    return this.contactsRepository.findManyWithPagination(
+      searchContactsQueryWithPaginationDto,
+    );
   }
 
   getContactById(id: string): Promise<ContactDocument> {
@@ -39,7 +45,9 @@ export class ContactsService {
     return this.contactsRepository.update(contactId, upadateContactDto);
   }
 
-  searchContacts(searchPhrase: string) {
-    return this.contactsRepository.search(searchPhrase);
-  }
+  // searchContacts(
+  //   SearchContactsQueryWithPaginationDto: SearchContactsQueryWithPaginationDto,
+  // ): Promise<ContactDocument[]> {
+  //   return this.contactsRepository.search(SearchContactsQueryWithPaginationDto);
+  // }
 }
