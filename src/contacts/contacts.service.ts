@@ -1,4 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpCode,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ContactsRepository } from './repositories/contacts.repository';
 import { ContactDocument } from './repositories/contact.schema';
 import {
@@ -6,20 +12,39 @@ import {
   SearchContactsQueryWithPaginationDto,
   UpadteContactDto,
 } from './dtos/contact.dto';
-import {
-  PaginationResponseDto,
-  PaginationRequestDto,
-} from '../dtos/pagination.dto';
+import { PaginationResponseDto } from '../dtos/pagination.dto';
 
 @Injectable()
 export class ContactsService {
   constructor(private contactsRepository: ContactsRepository) {}
-  createContact(contact: CreateContactDto): Promise<ContactDocument> {
-    return this.contactsRepository.create(contact);
+
+  async createContact(contact: CreateContactDto): Promise<ContactDocument> {
+    let createdContact: ContactDocument;
+
+    try {
+      contact = await this.contactsRepository.create(contact);
+    } catch (error) {
+      if (error.status === HttpStatus.CONFLICT)
+        this.handleDuplicateContactError(error.response);
+    }
+
+    return createdContact;
   }
 
-  bulkCreateContacts(contacts: CreateContactDto[]): Promise<ContactDocument[]> {
-    return this.contactsRepository.bulkCreate(contacts);
+  async bulkCreateContacts(
+    contacts: CreateContactDto[],
+  ): Promise<ContactDocument[]> {
+    let createdContacts: ContactDocument[];
+
+    try {
+      createdContacts = await this.contactsRepository.bulkCreate(contacts);
+    } catch (error) {
+      if (error.status === HttpStatus.CONFLICT) {
+        this.handleBulkDuplicateContactError(error.response);
+      }
+    }
+
+    return createdContacts;
   }
 
   getContacts(
@@ -30,24 +55,49 @@ export class ContactsService {
     );
   }
 
-  getContactById(id: string): Promise<ContactDocument> {
-    return this.contactsRepository.findById(id);
+  async getContactById(id: string): Promise<ContactDocument> {
+    const contact = await this.contactsRepository.findById(id);
+
+    if (!contact) {
+      this.handleContactNotFound();
+    }
+
+    return contact;
   }
 
   deleteContactById(id: string): Promise<ContactDocument> {
     return this.contactsRepository.deleteById(id);
   }
 
-  updateContact(
+  async updateContact(
     contactId: string,
     upadateContactDto: UpadteContactDto,
   ): Promise<ContactDocument> {
-    return this.contactsRepository.update(contactId, upadateContactDto);
+    const contact = await this.contactsRepository.update(
+      contactId,
+      upadateContactDto,
+    );
+
+    if (!contact) {
+      this.handleContactNotFound();
+    }
+
+    return contact;
   }
 
-  // searchContacts(
-  //   SearchContactsQueryWithPaginationDto: SearchContactsQueryWithPaginationDto,
-  // ): Promise<ContactDocument[]> {
-  //   return this.contactsRepository.search(SearchContactsQueryWithPaginationDto);
-  // }
+  private handleContactNotFound() {
+    throw new NotFoundException('Contact with porvided ID not found');
+  }
+
+  private handleDuplicateContactError(keys: Iterable<string>[]) {
+    throw new ConflictException(
+      `Contact with provided keys already exists: ${keys}`,
+    );
+  }
+
+  private handleBulkDuplicateContactError(message: string) {
+    throw new ConflictException(
+      `Contact with provided keys already exists: ${message}`,
+    );
+  }
 }

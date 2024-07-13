@@ -28,7 +28,6 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { log } from 'console';
 
 @ApiTags('Contacts')
 @Controller('contacts')

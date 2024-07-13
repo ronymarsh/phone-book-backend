@@ -1,0 +1,1 @@
+export const MONGO_DUPLICATE_ERROR_CODE = 11000;
