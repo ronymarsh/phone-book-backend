@@ -1,6 +1,4 @@
-import { DefaultValuePipe } from '@nestjs/common';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
 import {
   IsEnum,
   IsMongoId,
@@ -66,7 +64,8 @@ export class SearchContactsQueryWithPaginationDtoWithPagination extends SearchCo
 
   @ApiProperty({ required: false, type: String })
   @IsOptional()
-  @IsEnum(SortDirEnum)å
+  @IsEnum(SortDirEnum)
+  å;
   sortDirection: SortDirEnum;
 }
 

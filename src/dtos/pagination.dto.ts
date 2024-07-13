@@ -1,6 +1,8 @@
+import { MongooseModule } from '@nestjs/mongoose';
 import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNumber, IsOptional, Max, ValidateNested } from 'class-validator';
+import { Mongoose } from 'mongoose';
 
 export class PaginationRequestDto {
   @ApiProperty({ required: false, type: Number })
@@ -30,9 +32,7 @@ export class PaginationMetadataDto {
 }
 
 export class PaginationResponseDto<T> {
-  @ApiResponseProperty()
-  @ValidateNested()
-  @Type(() => PaginationMetadataDto)
+  @ApiResponseProperty({ type: PaginationMetadataDto })
   metadata: PaginationMetadataDto;
 
   @ApiResponseProperty()

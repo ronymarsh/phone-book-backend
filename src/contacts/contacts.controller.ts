@@ -18,10 +18,7 @@ import {
   UpadteContactDto,
 } from './dtos/contact.dto';
 import { MongoIdParam } from '../dtos/mongo-id-param.dto';
-import {
-  PaginationRequestDto,
-  PaginationResponseDto,
-} from '../dtos/pagination.dto';
+import { PaginationResponseDto } from '../dtos/pagination.dto';
 import {
   ApiBody,
   ApiCreatedResponse,
@@ -51,7 +48,28 @@ export class ContactsController {
     description: 'Number of contacts per page',
     required: false,
   })
-  @ApiResponse({ type: () => PaginationResponseDto })
+  @ApiQuery({
+    name: 'searchKey',
+    type: String,
+    description: 'Text value search',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'sortBy',
+    type: String,
+    description: 'Field to sort by, ignored if no such field',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'sortDirection',
+    type: String,
+    description: 'Order to sort results by, defaults to ascending',
+    required: false,
+  })
+  @ApiOkResponse({
+    description: 'Desired contacts according to provided query',
+    type: () => PaginationResponseDto<ContactDocumentDto>,
+  })
   async getContacts(
     @Query()
     searchContactsQueryWithPaginationDto: SearchContactsQueryWithPaginationDto,
