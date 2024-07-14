@@ -32,6 +32,7 @@ import {
 import { ContactsCsvService } from './contacts-csv.service';
 import { Response } from 'express';
 import * as fs from 'fs';
+import { LoggerService } from 'src/logger/src/logger.service';
 
 @ApiTags('Contacts')
 @Controller('contacts')
@@ -39,6 +40,7 @@ export class ContactsController {
   constructor(
     private readonly contactsService: ContactsService,
     private readonly contactsCsvService: ContactsCsvService,
+    private readonly loggerService: LoggerService,
   ) {}
 
   @Get()
