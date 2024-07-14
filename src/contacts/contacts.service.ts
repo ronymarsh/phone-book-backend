@@ -34,7 +34,7 @@ export class ContactsService {
     let createdContact: ContactDocument;
 
     try {
-      contact = await this.contactsRepository.create(contact);
+      createdContact = await this.contactsRepository.create(contact);
     } catch (error) {
       if (error.status === HttpStatus.CONFLICT)
         this.handleDuplicateContactError(error.response);
