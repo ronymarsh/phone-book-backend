@@ -19,7 +19,6 @@ import {
 } from '../../dtos/pagination.dto';
 import { SortDirEnum } from 'src/enums/db.enums';
 import { MONGO_DUPLICATE_ERROR_CODE } from 'src/consts';
-import { log } from 'console';
 
 @Injectable()
 export class ContactsRepository {
