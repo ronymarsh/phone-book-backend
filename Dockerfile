@@ -12,6 +12,9 @@ COPY node_modules ./node_modules
 COPY src ./src
 COPY nest-cli.json ./
 
+COPY csv ./csv
+
+
 #install nestcli globally for using commands
 RUN npm install -g @nestjs/cli
 
@@ -20,7 +23,7 @@ RUN nest build
 
 #demo app, no worries..
 ENV MONGO_PHONE_BOOK_HOST="mongodb+srv://dbUser:H7o5iWOSek1xEoHc@phone-book.irpesip.mongodb.net/phoneBookDB"
-ENV CSV_DIRECTORY="tmp"
+ENV CSV_DIRECTORY="csv"
 
 EXPOSE 3000
 

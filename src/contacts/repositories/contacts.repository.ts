@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Contact, ContactDocument } from './contact.schema';
 import {
+  ContactDocumentDto,
   CreateContactDto,
   SearchContactsQueryWithPaginationDto,
   UpadteContactDto,
@@ -97,7 +98,22 @@ export class ContactsRepository {
     id: string,
     updateDto: UpadteContactDto,
   ): Promise<ContactDocument> {
-    return this.contactModel.findByIdAndUpdate(id, updateDto, { new: true });
+    let updatedContact: ContactDocument;
+    try {
+      updatedContact = await this.contactModel.findByIdAndUpdate(
+        id,
+        updateDto,
+        {
+          new: true,
+        },
+      );
+    } catch (error) {
+      if (error.code === MONGO_DUPLICATE_ERROR_CODE) {
+        throw new HttpException(Object.keys(error.keyPattern), 409);
+      }
+      throw error;
+    }
+    return updatedContact;
   }
 
   async findAll(limit?: number): Promise<ContactDocument[]> {

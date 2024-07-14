@@ -1,0 +1,3 @@
+MONGO_PHONE_BOOK_HOST="db_connection_string"
+CSV_DIRECTORY="folder to use for csv import/export"
+PHONE_BOOK_PORT=3000

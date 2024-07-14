@@ -73,16 +73,24 @@ export class ContactsService {
     contactId: string,
     upadateContactDto: UpadteContactDto,
   ): Promise<ContactDocument> {
-    const contact = await this.contactsRepository.update(
-      contactId,
-      upadateContactDto,
-    );
+    let updatedContact: ContactDocument;
 
-    if (!contact) {
+    try {
+      updatedContact = await this.contactsRepository.update(
+        contactId,
+        upadateContactDto,
+      );
+      console.log(updatedContact);
+    } catch (error) {
+      if (error.status === HttpStatus.CONFLICT)
+        this.handleDuplicateContactError(error.response);
+    }
+
+    if (!updatedContact) {
       this.handleContactNotFound();
     }
 
-    return contact;
+    return updatedContact;
   }
 
   private handleContactNotFound() {
