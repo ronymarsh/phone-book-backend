@@ -1,4 +1,9 @@
-import { ConflictException, HttpException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Contact, ContactDocument } from './contact.schema';
@@ -29,13 +34,16 @@ export class ContactsRepository {
       createdContact = await this.contactModel.create(contact);
     } catch (error) {
       if (error.code === MONGO_DUPLICATE_ERROR_CODE) {
-        throw new HttpException(Object.keys(error.keyPattern), 409);
+        throw new HttpException(
+          Object.keys(error.keyPattern),
+          HttpStatus.CONFLICT,
+        );
       }
     }
     return createdContact;
   }
 
-  async bulkCreate(contacts: CreateContactDto[]): Promise<ContactDocument[]> {
+  async batchCreate(contacts: CreateContactDto[]): Promise<ContactDocument[]> {
     let createdContacts: ContactDocument[];
     try {
       createdContacts = await this.contactModel.insertMany(contacts);
@@ -45,7 +53,7 @@ export class ContactsRepository {
 
         throw new HttpException(
           error.errorResponse.message.split('dup key:')[1],
-          409,
+          HttpStatus.CONFLICT,
         );
       }
     }
@@ -109,7 +117,10 @@ export class ContactsRepository {
       );
     } catch (error) {
       if (error.code === MONGO_DUPLICATE_ERROR_CODE) {
-        throw new HttpException(Object.keys(error.keyPattern), 409);
+        throw new HttpException(
+          Object.keys(error.keyPattern),
+          HttpStatus.CONFLICT,
+        );
       }
       throw error;
     }

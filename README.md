@@ -26,9 +26,9 @@ nest start
 ```
 
 ### Postman collection to play with
+[link to collection](https://drive.google.com/file/d/1tOK8C5fBHXqS4rjCQ17AkFUmzzXJo9_P/view?usp=sharing)
 
 ### CSV
 
-Use sample data.csv file in `tmp` for importing contacts from csv file
-
+Use sample data.csv file in `/csv` for importing contacts from csv file
 

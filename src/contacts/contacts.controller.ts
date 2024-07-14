@@ -108,17 +108,17 @@ export class ContactsController {
     return this.contactsService.createContact(contact);
   }
 
-  @Post('bulk')
+  @Post('batch')
   @ApiBody({ type: [CreateContactDto] })
   @ApiCreatedResponse({
     description: 'All contacts created successfully',
     type: [ContactDocumentDto],
   })
-  async bulkCreateContacts(
+  async batchCreateContacts(
     @Body(new ParseArrayPipe({ items: CreateContactDto }))
     contacts: CreateContactDto[],
   ): Promise<ContactDocument[]> {
-    return this.contactsService.bulkCreateContacts(contacts);
+    return this.contactsService.batchCreateContacts(contacts);
   }
 
   @Patch(':id')

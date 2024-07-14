@@ -43,16 +43,16 @@ export class ContactsService {
     return createdContact;
   }
 
-  async bulkCreateContacts(
+  async batchCreateContacts(
     contacts: CreateContactDto[],
   ): Promise<ContactDocument[]> {
     let createdContacts: ContactDocument[];
 
     try {
-      createdContacts = await this.contactsRepository.bulkCreate(contacts);
+      createdContacts = await this.contactsRepository.batchCreate(contacts);
     } catch (error) {
       if (error.status === HttpStatus.CONFLICT) {
-        this.handleBulkDuplicateContactError(error.response);
+        this.handleBatchDuplicateContactError(error.response);
       }
     }
 
@@ -146,10 +146,10 @@ export class ContactsService {
 
     let createdContacts: ContactDocument[];
     try {
-      createdContacts = await this.contactsRepository.bulkCreate(dataInJSON);
+      createdContacts = await this.contactsRepository.batchCreate(dataInJSON);
     } catch (error) {
       if (error.status === HttpStatus.CONFLICT) {
-        this.handleBulkDuplicateContactError(error.response);
+        this.handleBatchDuplicateContactError(error.response);
       }
     }
     return createdContacts;
@@ -167,7 +167,7 @@ export class ContactsService {
     throw new ConflictException(errorMsg);
   }
 
-  private handleBulkDuplicateContactError(message: string) {
+  private handleBatchDuplicateContactError(message: string) {
     const errorMsg = `Contact with provided keys already exists: ${message}`;
     this.loggerService.error(errorMsg);
     throw new ConflictException(errorMsg);
