@@ -1,9 +1,11 @@
 import {
+  BadRequestException,
   ConflictException,
   HttpCode,
   HttpStatus,
   Injectable,
   NotFoundException,
+  Res,
 } from '@nestjs/common';
 import { ContactsRepository } from './repositories/contacts.repository';
 import { ContactDocument } from './repositories/contact.schema';
@@ -14,6 +16,12 @@ import {
 } from './dtos/contact.dto';
 import { PaginationResponseDto } from '../dtos/pagination.dto';
 import { LoggerService } from 'src/logger/src/logger.service';
+import * as fs from 'fs';
+import * as path from 'path';
+import { MAX_CSV_LIMIT } from 'src/consts';
+import { createObjectCsvWriter } from 'csv-writer';
+import { Response } from 'express';
+const csvToJSON = require('csv-file-to-json');
 
 @Injectable()
 export class ContactsService {
@@ -95,6 +103,59 @@ export class ContactsService {
     }
 
     return updatedContact;
+  }
+
+  async exportContactsToCsv(@Res() responseObj: Response, saveFile = false) {
+    const destinationFilePath = `${process.env.CSV_DIRECTORY}/contacts.csv`;
+    const contacts = await this.contactsRepository.findAll(MAX_CSV_LIMIT);
+
+    if (!fs.existsSync(path.dirname(destinationFilePath)))
+      fs.mkdirSync(path.dirname(destinationFilePath));
+
+    const writer = createObjectCsvWriter({
+      path: destinationFilePath,
+      header: ['firstName', 'lastName', 'phone', 'address'],
+    });
+    await writer.writeRecords(contacts);
+    if (saveFile) {
+      return responseObj.send(destinationFilePath);
+    }
+
+    return responseObj.download(destinationFilePath, 'contacts.csv', (err) => {
+      if (err) {
+        console.error(err);
+      }
+      fs.unlinkSync(destinationFilePath);
+    });
+  }
+
+  async importContactsFromCsv(fileName: string) {
+    const filePath = `${process.env.CSV_DIRECTORY}/${fileName}.csv`;
+    if (!fs.existsSync(filePath)) {
+      throw new NotFoundException('Input csv file not found');
+    }
+
+    const dataInJSON = csvToJSON({
+      filePath,
+    });
+
+    dataInJSON.forEach((element: CreateContactDto) => {
+      const { firstName, lastName, phone, address } = element;
+      if (!(firstName && lastName && phone && address))
+        throw new BadRequestException(
+          `missing properties for contact:${JSON.stringify(element)} `,
+        );
+    });
+
+    let createdContacts: ContactDocument[];
+    try {
+      createdContacts = await this.contactsRepository.bulkCreate(dataInJSON);
+    } catch (error) {
+      if (error.status === HttpStatus.CONFLICT) {
+        this.handleBulkDuplicateContactError(error.response);
+      }
+    }
+    return createdContacts;
   }
 
   private handleContactNotFound() {

@@ -1,9 +1,6 @@
 #env
 .env
 
-#tmp
-/csv
-
 # compiled output
 /dist
 /node_modules

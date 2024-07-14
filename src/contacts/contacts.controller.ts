@@ -29,7 +29,6 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { ContactsCsvService } from './contacts-csv.service';
 import { Response } from 'express';
 import { LoggerService } from 'src/logger/src/logger.service';
 
@@ -38,7 +37,6 @@ import { LoggerService } from 'src/logger/src/logger.service';
 export class ContactsController {
   constructor(
     private readonly contactsService: ContactsService,
-    private readonly contactsCsvService: ContactsCsvService,
     private readonly loggerService: LoggerService,
   ) {}
 
@@ -149,13 +147,16 @@ export class ContactsController {
   }
 
   @Get('csv/export')
-  async exportContactsToCsv(@Res() responseObj: Response) {
-    return this.contactsCsvService.exportContactsToCsv(responseObj);
+  async exportContactsToCsv(
+    @Res() responseObj: Response,
+    @Query('save') saveFile: boolean,
+  ) {
+    return this.contactsService.exportContactsToCsv(responseObj,saveFile);
   }
 
   // csv file must include headers line
   @Get('csv/import')
   async importContactsFromCsv(@Query('fileName') fileName: string) {
-    return this.contactsCsvService.importContactsFromCsv(fileName);
+    return this.contactsService.importContactsFromCsv(fileName);
   }
 }
