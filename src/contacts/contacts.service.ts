@@ -13,10 +13,14 @@ import {
   UpadteContactDto,
 } from './dtos/contact.dto';
 import { PaginationResponseDto } from '../dtos/pagination.dto';
+import { LoggerService } from 'src/logger/src/logger.service';
 
 @Injectable()
 export class ContactsService {
-  constructor(private contactsRepository: ContactsRepository) {}
+  constructor(
+    private contactsRepository: ContactsRepository,
+    private loggerService: LoggerService,
+  ) {}
 
   async createContact(contact: CreateContactDto): Promise<ContactDocument> {
     let createdContact: ContactDocument;
@@ -94,18 +98,20 @@ export class ContactsService {
   }
 
   private handleContactNotFound() {
+    const errorMsg = `Contact with porvided ID not found`;
+    this.loggerService.error(errorMsg);
     throw new NotFoundException('Contact with porvided ID not found');
   }
 
   private handleDuplicateContactError(keys: Iterable<string>[]) {
-    throw new ConflictException(
-      `Contact with provided keys already exists: ${keys}`,
-    );
+    const errorMsg = `Contact with provided keys already exists: ${keys}`;
+    this.loggerService.error(errorMsg);
+    throw new ConflictException(errorMsg);
   }
 
   private handleBulkDuplicateContactError(message: string) {
-    throw new ConflictException(
-      `Contact with provided keys already exists: ${message}`,
-    );
+    const errorMsg = `Contact with provided keys already exists: ${message}`;
+    this.loggerService.error(errorMsg);
+    throw new ConflictException(errorMsg);
   }
 }

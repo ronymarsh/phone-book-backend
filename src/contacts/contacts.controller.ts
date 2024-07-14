@@ -31,7 +31,6 @@ import {
 } from '@nestjs/swagger';
 import { ContactsCsvService } from './contacts-csv.service';
 import { Response } from 'express';
-import * as fs from 'fs';
 import { LoggerService } from 'src/logger/src/logger.service';
 
 @ApiTags('Contacts')

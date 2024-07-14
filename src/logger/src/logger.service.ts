@@ -13,23 +13,23 @@ export class LoggerService {
   }
 
   debug(message: string, value?: any) {
-    this.logMessage(message, 'debug', value);
+    this.logMessage(message, 'DEBUG', value);
   }
 
   log(message: string, value?: any) {
-    this.logMessage(message, 'info', value);
+    this.logMessage(message, 'INFO', value);
   }
 
   error(message: string, value?: any) {
-    this.logMessage(message, 'error', value);
+    this.logMessage(message, 'ERROR', value);
   }
 
   warn(message: string, value?: any) {
-    this.logMessage(message, 'warn', value);
+    this.logMessage(message, 'WARN', value);
   }
 
-  private logMessage(message: string, level: string, value: any) {
-    this._logger.log(level, message, value);
+  private logMessage(message: string, level: string, value?: any) {
+    this._logger.log(level, message, value || '');
   }
 
   private logRequest() {
@@ -38,7 +38,7 @@ export class LoggerService {
     } | PARAMS: ${JSON.stringify(
       this.request.params,
     )} | QUERY: ${JSON.stringify(this.request.query)}`;
-    this.log('log:', log);
+    this.log('request', log);
     this.logBody();
   }
 
