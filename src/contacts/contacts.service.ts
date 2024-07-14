@@ -105,7 +105,7 @@ export class ContactsService {
     return updatedContact;
   }
 
-  async exportContactsToCsv(@Res() responseObj: Response, saveFile = false) {
+  async exportContactsToCsv(@Res() responseObj: Response) {
     const destinationFilePath = `${process.env.CSV_DIRECTORY}/contacts.csv`;
     const contacts = await this.contactsRepository.findAll(MAX_CSV_LIMIT);
 
@@ -117,9 +117,6 @@ export class ContactsService {
       header: ['firstName', 'lastName', 'phone', 'address'],
     });
     await writer.writeRecords(contacts);
-    if (saveFile) {
-      return responseObj.send(destinationFilePath);
-    }
 
     return responseObj.download(destinationFilePath, 'contacts.csv', (err) => {
       if (err) {
@@ -129,7 +126,7 @@ export class ContactsService {
     });
   }
 
-  async importContactsFromCsv(fileName: string) {
+  async importContactsFromCsv(fileName: string): Promise<ContactDocument[]> {
     const filePath = `${process.env.CSV_DIRECTORY}/${fileName}.csv`;
     if (!fs.existsSync(filePath)) {
       throw new NotFoundException('Input csv file not found');

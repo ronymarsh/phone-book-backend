@@ -146,17 +146,27 @@ export class ContactsController {
     return this.contactsService.deleteContactById(mongoIdParam.id);
   }
 
+  @ApiResponse({
+    description: 'all contacts to csv foramt',
+  })
   @Get('csv/export')
-  async exportContactsToCsv(
-    @Res() responseObj: Response,
-    @Query('save') saveFile: boolean,
-  ) {
-    return this.contactsService.exportContactsToCsv(responseObj,saveFile);
+  async exportContactsToCsv(@Res() responseObj: Response) {
+    return this.contactsService.exportContactsToCsv(responseObj);
   }
 
-  // csv file must include headers line
-  @Get('csv/import')
-  async importContactsFromCsv(@Query('fileName') fileName: string) {
+  @ApiResponse({
+    description: 'Created contacts from csv file',
+    type: [ContactDocumentDto],
+  })
+  @ApiQuery({
+    name: 'fileName',
+    required: true,
+    description: 'name of csv file to import from in /csv folder',
+  })
+  @Post('csv/import')
+  async importContactsFromCsv(
+    @Query('fileName') fileName: string,
+  ): Promise<ContactDocument[]> {
     return this.contactsService.importContactsFromCsv(fileName);
   }
 }
