@@ -49,7 +49,7 @@ Use sample data.csv file in `/csv` for importing contacts from csv file
 
     {
     	"firstName": string,//required
-    	"lastName": string, // required, combination o firstName and lastName must be unique
+    	"lastName": string, // required, combination of firstName and lastName must be unique
     	"phone": string, // required, <countryCode><number>. example: +972541234567
     	"address": string // optional
     }
