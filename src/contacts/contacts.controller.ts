@@ -41,6 +41,11 @@ export class ContactsController {
     private readonly loggerService: LoggerService,
   ) {}
 
+  @Get('health')
+  healthCheck() {
+    return 'healthy';
+  }
+
   @Get()
   @ApiQuery({
     name: 'page',
