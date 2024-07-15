@@ -1,8 +1,6 @@
-import { MongooseModule } from '@nestjs/mongoose';
 import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, Max, ValidateNested } from 'class-validator';
-import { Mongoose } from 'mongoose';
+import { IsNumber, Max, Min } from 'class-validator';
 
 export class PaginationRequestDto {
   @ApiProperty({ required: false, type: Number })
@@ -14,6 +12,7 @@ export class PaginationRequestDto {
   @IsNumber()
   @Type(() => Number)
   @Max(10)
+  @Min(1)
   pageSize = 10;
 }
 

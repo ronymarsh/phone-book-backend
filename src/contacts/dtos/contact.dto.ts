@@ -51,24 +51,6 @@ export class SearchContactsQueryWithPaginationDto extends PaginationRequestDto {
   sortDirection: SortDirEnum;
 }
 
-export class SearchContactsQueryWithPaginationDtoWithPagination extends SearchContactsQueryWithPaginationDto {
-  @ApiProperty({ required: false, type: String })
-  @IsOptional()
-  @IsString()
-  searchKey: string;
-
-  @ApiProperty({ required: false, type: String })
-  @IsOptional()
-  @IsString()
-  sortBy: string;
-
-  @ApiProperty({ required: false, type: String })
-  @IsOptional()
-  @IsEnum(SortDirEnum)
-  å;
-  sortDirection: SortDirEnum;
-}
-
 // for swagger
 export class ContactDocumentDto extends CreateContactDto {
   @ApiProperty()

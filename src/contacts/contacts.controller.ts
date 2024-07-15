@@ -31,6 +31,7 @@ import {
 } from '@nestjs/swagger';
 import { Response } from 'express';
 import { LoggerService } from 'src/logger/src/logger.service';
+import { ImportCsvParamsDto } from 'src/dtos/import-csv.dto';
 
 @ApiTags('Contacts')
 @Controller('contacts')
@@ -165,8 +166,10 @@ export class ContactsController {
   })
   @Post('csv/import')
   async importContactsFromCsv(
-    @Query('fileName') fileName: string,
+    @Query() importCsvParamsDto: ImportCsvParamsDto,
   ): Promise<ContactDocument[]> {
-    return this.contactsService.importContactsFromCsv(fileName);
+    return this.contactsService.importContactsFromCsv(
+      importCsvParamsDto.fileName,
+    );
   }
 }
