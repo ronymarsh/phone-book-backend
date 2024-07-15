@@ -15,7 +15,7 @@ docker run -p 127.0.0.1:3000:3000 ronymarsh/phonebook_v1.0
 ```
 
 After app is running, swagger docs are available [here](http://localhost:3000/doc)
-Or jump to [API](#REST-API)
+Or jump to [API](#API)
 
 ### Running Locally (requires having NodeJS installed)
 
