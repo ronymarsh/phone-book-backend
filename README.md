@@ -19,6 +19,8 @@ Or jump to [API](#API)
 
 ### Running Locally (requires having NodeJS installed)
 
+in project root directory run:
+
 ```sh
 npm i
 ```
