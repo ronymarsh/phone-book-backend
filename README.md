@@ -84,10 +84,10 @@ create multiple documents (all or nothing)
 
     [
         {
-    	"firstName": string,//required
-    	"lastName": string, // required, combination o firstName and lastName must be unique
-    	"phone": string, // required, <countryCode><number>. example: +972541234567
-    	"address": string // optional
+    	    "firstName": string,//required
+        	"lastName": string, // required, combination o firstName and lastName must be unique
+        	"phone": string, // required, <countryCode><number>. example: +972541234567
+    	    "address": string // optional
     	}
     ]
 
@@ -97,13 +97,13 @@ Array of created contacts
 
     [
         {
-    	"firstName": string,
-    	"lastName": string,
-    	"phone": string,
-    	"_id": string,
-    	"createdAt": Date,
-    	"updatedAt": Date,
-    	"__v": number
+    	    "firstName": string,
+        	"lastName": string,
+    	    "phone": string,
+    	    "_id": string,
+    	    "createdAt": Date,
+    	    "updatedAt": Date,
+    	    "__v": number
     	}
     ]
 
@@ -282,13 +282,13 @@ Array of created contacts from file
 
     [
         {
-    	"firstName": string,
-    	"lastName": string,
-    	"phone": string,
-    	"_id": string,
-    	"createdAt": Date,
-    	"updatedAt": Date,
-    	"__v": number
+    	    "firstName": string,
+        	"lastName": string,
+        	"phone": string,
+        	"_id": string,
+        	"createdAt": Date,
+        	"updatedAt": Date,
+        	"__v": number
     	}
     ]
 
